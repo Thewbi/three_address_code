@@ -1,0 +1,193 @@
+```
+i = 1
+```
+
+```
+LABEL_1: i = 2
+```
+
+```
+L : t_1 = x * 5
+```
+
+```
+t_2 = &a
+```
+
+```
+t_4 = t_3 * 4
+```
+
+```
+t_5 = t_2 * t_4
+```
+
+```
+*t_5 = t_1
+```
+
+```
+i = i + 1
+```
+
+```
+t_3 = sizeof(int)
+```
+
+```
+if i <= 10 goto L
+```
+
+```
+t = - 1
+```
+
+```
+i = 1
+LABEL_1: i = 2
+L : t_1 = x * 5
+t_2 = &a
+t_4 = t_3 * 4
+t_5 = t_2 * t_4
+*t_5 = t_1
+i = i + 1
+t_3 = sizeof(int)
+if (i <= 10) goto L
+t = - 1
+```
+
+```
+t1 = - c
+t2 = b * t1
+t3 = - c
+
+t4 = b * t3
+t5 = t2 + t4
+a = t5
+
+```
+
+```
+// lul
+t1 = - c
+```
+
+```
+/* lul */
+t1 = - c
+```
+
+```
+t1 = x + y
+t2 = y + z
+t3 = t1 * t2
+t4 = t1 + z
+t5 = t3 + t4  
+```
+
+```
+t1 = b * b
+t2 = 4 * a
+t3 = t2 * c
+t4 = t1 - t3
+t5 = sqrt(t4)
+t6 = 0 - b
+t7 = t5 + t6
+t8 = 2 * a
+t9 = t7 / t8
+x = t9
+```
+
+```
+goto LABEL_1
+```
+
+```
+if (i > x) goto LABEL_1
+```
+
+
+-- https://www.geeksforgeeks.org/compiler-design-detection-of-a-loop-in-three-address-code/
+
+```
+			f = 1
+			i = 2
+LABEL_1:	if (i > x) goto LABEL_2
+			t1 = f * i
+			f = t1
+			t2 = i + 1
+			i = t2
+			goto LABEL_1
+LABEL_2: 	return
+```
+
+
+-- for (i = 0; i < 10; ++i) {
+--     b[i] = i*i; 
+-- }
+
+```
+     t1 = 0                		; initialize i
+L1:  if ( t1 >= 10 ) goto L2    ; conditional jump
+     t2 = t1 * t1          		; square of i
+     t3 = t1 * 4           		; word-align address
+     t4 = b + t3           		; address to store i*i
+     *t4 = t2              		; store through pointer
+     t1 = t1 + 1           		; increase i
+     goto L1                	; repeat loop
+L2:
+```
+
+
+The call instruction is used to save the current address onto the stack and jump to a label (= put label address into program counter).
+The return instruction will load the address from the stack into the program counter and increment by 1. 
+That means it returns to the instruction after the call.
+Intrinsic functions are { sqrt, sizeof, print, push, pop }
+
+print("something") is a function call to the intrinsic function print()
+```
+			t1 = 0
+			CALL FUNCTION_1
+			t2 = 0
+
+FUNCTION_1: print("hello world!")
+			return
+```
+
+```
+push(1)
+pop()
+```
+
+```
+*(this + 4) = x
+x = *(this + 8)
+```
+
+
+```
+t4 = t1 && t2  
+t5 = t4 || t3  
+b2 = _t2 == _t3
+```
+
+https://web.stanford.edu/class/archive/cs/cs143/cs143.1128/lectures/13/Slides13.pdf
+
+```
+b2 = _t2 == _t3
+```
+
+```
+main:
+ BeginFunc test_func
+ _t0 = x * x
+ _t1 = y * y
+ m2 = _t0 + _t1
+_L0:
+ _t2 = 5 < m2
+ if (_t2 == 0) Goto _L1
+ m2 = m2 - x
+ Goto _L0
+_L1:
+ EndFunc
+```
