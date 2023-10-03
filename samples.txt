@@ -153,20 +153,23 @@ Intrinsic functions are { sqrt, sizeof, print, push, pop }
 
 print("something") is a function call to the intrinsic function print()
 ```
-			t1 = 0
-			CALL FUNCTION_1
-			t2 = 0
+	t1 = 0
+	CALL FUNCTION_1
+	t2 = 0
 
-FUNCTION_1: print "hello world!"
-			return
+FUNCTION_1: 
+	print "hello world!"
+	return
 ```
 
 ```
 push(1)
-pop
+pop _t0
+pop 8
 
 push 1
-pop
+pop _t0
+pop 12
 ```
 
 ```
@@ -194,8 +197,8 @@ b2 = _t2 == _t3
 
 ```
 main:
-call test_func
-break
+	call test_func
+	break
 
 BeginFunc test_func
 	_t0 = x * x
@@ -228,4 +231,167 @@ if (_t2 == true) Goto _L1
 if (_t2 == false) Goto _L1
 if (true == _t2) Goto _L1
 if (false == _t2) Goto _L1
+```
+
+
+
+
+
+
+
+
+//
+// TAC for Objects
+//
+// https://web.stanford.edu/class/archive/cs/cs143/cs143.1128/lectures/13/Slides13.pdf
+//
+
+class A {
+	void fn(int x) {
+        int y;
+        y = x;
+    }
+}
+
+int main() {
+    A a;
+    a.fn(137);
+}
+
+
+
+```
+_A.fn:
+    BeginFunc _4
+        y = x
+    EndFunc
+```
+
+```
+main:
+    BeginFunc _8
+		_t0 = 137
+		push _t0
+		push a
+		call _A.fn
+		pop _t0
+	EndFunc
+```
+
+
+class A {
+ 	void fn(int x) {
+ 		int y;
+ 	y = x;
+ 	}
+}
+
+int main() {
+ 	A a;
+ 	a.fn(137);
+}
+
+```
+_A.fn:
+ 	BeginFunc _4
+ 		y = x
+	EndFunc
+
+main:
+ 	BeginFunc _8
+ 		_t0 = 137
+		push _t0
+		push a
+		call _A.fn
+		pop 8 			; remove the topmost eight byte from the stack without placing them in any register
+ 	EndFunc
+```
+
+
+class A {
+ int y;
+ int z;
+ void fn(int x) {
+ y = x;
+ x = z;
+ }
+}
+int main() {
+ A a;
+ a.fn(137);
+}
+
+
+```
+_A.fn:
+ BeginFunc _4;
+ *(this + 4) = x;
+ x = *(this + 8);
+ EndFunc;
+main:
+ BeginFunc _8;
+ _t0 = 137;
+ push _t0;
+ push a;
+ call _A.fn;
+ pop 8;
+ EndFunc;
+```
+
+
+
+class Base {
+ 	void hi() {
+ 		Print("Base");
+ 	}
+}
+
+class Derived extends Base{
+ 	void hi() {
+ 		Print("Derived");
+ 	}
+}
+
+int main() {
+ 	Base b;
+ 	b = new Derived;
+ 	b.hi();
+}
+
+
+```
+_Base.hi:
+	BeginFunc _4;
+		_t0 = "Base";
+		push _t0;
+		LCall _PrintString;
+		pop 4;
+	EndFunc;
+
+Vtable Base = _Base.hi
+
+_Derived.hi:
+	BeginFunc _4;
+		_t0 = "Derived";
+		push _t0;
+		LCall _PrintString;
+		pop 4;
+	EndFunc;
+
+Vtable Derived = _Derived.hi
+
+main:
+	BeginFunc _20;
+		_t0 = 4;
+		push _t0;
+		b = LCall _Alloc;
+		pop 4;
+		_t1 = Derived;
+		*b = _t1;
+		_t2 = *b;
+		_t3 = *_t2;
+		push b;
+		ACall _t3;
+		pop 4;
+	EndFunc;
 ```

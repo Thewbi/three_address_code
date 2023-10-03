@@ -15,7 +15,11 @@ source_line :
 	|
 	( label COLON )
 	|
+	( class_method_identifier COLON )
+	|
 	function_definition
+	|
+	vtable_assignment
 	;
 	
 label :
@@ -24,6 +28,8 @@ label :
 	
 assignment :
 	left_hand_side EQUALS expression
+	|
+	left_hand_side EQUALS lcall_expression
 	;
 	
 left_hand_side :
@@ -31,6 +37,10 @@ left_hand_side :
 	|
 	( ASTERISK )? OPENING_BRACKET expression CLOSEING_BRACKET
     ;
+
+lcall_expression :
+	LCALL ( function_identifier | class_method_identifier )
+	;
 
 predicate :
 	expression equals_operator ( TRUE | FALSE )
@@ -107,6 +117,8 @@ operand :
 	|
 	function_call
 	|
+	class_method_identifier
+	|
 	OPENING_BRACKET expression CLOSEING_BRACKET
 	;
 	
@@ -117,7 +129,7 @@ function_call :
 	|
 	PUSH expression
 	|
-	POP
+	POP ( IDENTIFIER | NUMBER )
 	|
 	PRINT STRING ( COMMA parameter_list )?
 	|
@@ -137,13 +149,19 @@ parameter :
 control_flow :
 	( if_statement )? GOTO IDENTIFIER
 	|
-	CALL IDENTIFIER
+	( CALL | LCALL | ACALL ) function_identifier
+	|
+	( CALL | LCALL | ACALL ) class_method_identifier
 	|
 	RETURN
 	;
 	
 if_statement :
 	IF OPENING_BRACKET predicate CLOSEING_BRACKET
+	;
+
+function_identifier :
+	IDENTIFIER
 	;
 	
 function_definition :
@@ -155,3 +173,38 @@ function_definition :
 function_body :
 	( source_line )+
 	;
+
+//
+// TAC for Objects
+//
+// https://web.stanford.edu/class/archive/cs/cs143/cs143.1128/lectures/13/Slides13.pdf
+//
+
+// class A {
+//     void fn(int x) {
+//         int y;
+//         y = x;
+//     }
+// }
+//
+// int main() {
+//     A a;
+//     a.fn(137);
+// }
+
+
+class_method_identifier :
+	IDENTIFIER DOT IDENTIFIER
+	;
+
+vtable_assignment :
+	VTABLE IDENTIFIER EQUALS class_method_list
+	;
+
+class_method_list :
+	class_method_identifier
+	|
+	class_method_list COMMA class_method_identifier
+	;
+
+

@@ -28,6 +28,7 @@ fragment Y:[yY];
 fragment Z:[zZ];
 
 
+ACALL : A C A L L ;
 AMPERSAND : '&' ;
 ASTERISK : '*' ;
 AT : '@' ;
@@ -60,6 +61,7 @@ HASH_TAG : '#' ;
 IF : 'if' ;
 INCLUDE : 'include' ;
 
+LCALL : L C A L L ;
 LEFT_SHIFT : '<<' ;
 LT : '<' ;
 LTE : '<=' ;
@@ -82,6 +84,8 @@ SQRT : S Q R T ;
 SLASH : '/' ;
 
 TRUE : T R U E ;
+
+VTABLE : V T A B L E ;
 
 NEWLINE : '\r'? '\n' -> channel(HIDDEN) ;
 
