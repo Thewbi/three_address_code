@@ -1,4 +1,4 @@
-lexer grammar TacLexer;
+lexer grammar tac;
 
 fragment A:[aA];
 fragment B:[bB];
@@ -35,6 +35,7 @@ AT : '@' ;
 BACKSLASH : '\\' ;
 BAR : '|' ;
 BEGINFUNC : B E G I N F U N C ;
+BREAK : B R E A K ;
 
 CALL : C A L L ;
 CLOSEING_BRACKET : ')' ;
@@ -47,6 +48,8 @@ ELSE : 'else' ;
 ENDIF : 'endif' ;
 ENDFUNC : E N D F U N C ;
 EQUALS : '=' ;
+
+FALSE : F A L S E ;
 
 GOTO : G O T O ;
 GT : '>' ;
@@ -67,11 +70,18 @@ MINUS : '-' ;
 OPENING_BRACKET : '(' ;
 
 PLUS : '+' ;
+POP : P O P ;
+PRINT : P R I N T ;
+PUSH : P U S H ;
 
 RETURN : R E T U R N ;
 RIGHT_SHIFT : '>>' ;
 
+SIZEOF : S I Z E O F ;
+SQRT : S Q R T ;
 SLASH : '/' ;
+
+TRUE : T R U E ;
 
 NEWLINE : '\r'? '\n' -> channel(HIDDEN) ;
 

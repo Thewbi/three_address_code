@@ -1,5 +1,5 @@
-parser grammar TacParser;
-options { tokenVocab=TacLexer; }
+parser grammar tac;
+options { tokenVocab=tac; }
 
 
 compilation_unit :
@@ -31,6 +31,18 @@ left_hand_side :
 	|
 	( ASTERISK )? OPENING_BRACKET expression CLOSEING_BRACKET
     ;
+
+predicate :
+	expression equals_operator ( TRUE | FALSE )
+	|
+	( TRUE | FALSE ) equals_operator expression
+	|
+	expression
+	|
+	TRUE 
+	| 
+	FALSE
+	;
 	
 expression :
     operand
@@ -99,19 +111,39 @@ operand :
 	;
 	
 function_call :
-	IDENTIFIER OPENING_BRACKET ( expression )? CLOSEING_BRACKET
+	SIZEOF expression
+	|
+	SQRT expression
+	|
+	PUSH expression
+	|
+	POP
+	|
+	PRINT STRING ( COMMA parameter_list )?
+	|
+	BREAK
+	;
+	
+parameter_list :
+	parameter
+	|
+	parameter_list COMMA parameter 
+	;
+	
+parameter :
+	expression
 	;
 	
 control_flow :
-	( predicate )? GOTO IDENTIFIER
+	( if_statement )? GOTO IDENTIFIER
 	|
 	CALL IDENTIFIER
 	|
 	RETURN
 	;
 	
-predicate :
-	IF OPENING_BRACKET expression CLOSEING_BRACKET
+if_statement :
+	IF OPENING_BRACKET predicate CLOSEING_BRACKET
 	;
 	
 function_definition :

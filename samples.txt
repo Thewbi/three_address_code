@@ -64,7 +64,6 @@ t3 = - c
 t4 = b * t3
 t5 = t2 + t4
 a = t5
-
 ```
 
 ```
@@ -81,6 +80,7 @@ t1 = - c
 t1 = x + y
 t2 = y + z
 t3 = t1 * t2
+
 t4 = t1 + z
 t5 = t3 + t4  
 ```
@@ -96,6 +96,13 @@ t7 = t5 + t6
 t8 = 2 * a
 t9 = t7 / t8
 x = t9
+```
+
+```
+t1 = a * ( b + c )
+t1 = ( a + b ) * c
+t1 = ( a + b ) * ( c + d )
+t1 = ( a + ( b ) ) * ( c + d )
 ```
 
 ```
@@ -150,13 +157,21 @@ print("something") is a function call to the intrinsic function print()
 			CALL FUNCTION_1
 			t2 = 0
 
-FUNCTION_1: print("hello world!")
+FUNCTION_1: print "hello world!"
 			return
 ```
 
 ```
 push(1)
-pop()
+pop
+
+push 1
+pop
+```
+
+```
+print "hello world!"
+print "hello world! %d %d %d", 1, 2, 3
 ```
 
 ```
@@ -179,15 +194,38 @@ b2 = _t2 == _t3
 
 ```
 main:
- BeginFunc test_func
- _t0 = x * x
- _t1 = y * y
- m2 = _t0 + _t1
+call test_func
+break
+
+BeginFunc test_func
+	_t0 = x * x
+	_t1 = y * y
+	m2 = _t0 + _t1
 _L0:
- _t2 = 5 < m2
- if (_t2 == 0) Goto _L1
- m2 = m2 - x
- Goto _L0
+	_t2 = 5 < m2
+	if (_t2 == 0) Goto _L1
+	m2 = m2 - x
+	Goto _L0
 _L1:
- EndFunc
+EndFunc
+```
+
+
+```
+if (_t2 == 0) Goto _L1
+if (_t2 == _t3) Goto _L1
+```
+
+
+```
+if ((_t2 && _t3) == (_t4 && _t5)) Goto _L1
+```
+
+```
+if (true) Goto _L1
+if (false) Goto _L1
+if (_t2 == true) Goto _L1
+if (_t2 == false) Goto _L1
+if (true == _t2) Goto _L1
+if (false == _t2) Goto _L1
 ```
