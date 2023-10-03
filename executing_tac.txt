@@ -1,0 +1,29 @@
+Phase 1
+- Parse each line and build a tree of nodes for expressions so that this tree 
+  can be evaluated once all unknown symbols are known in a later Phase
+- Resolve all .include instructions and copy each line into the line list while
+  also converting expressions into node trees for deferred evaluation
+- Remove .include lines and do not add them to the line list
+
+Phase 2
+- Iterate the list of lines
+- increment the address counter for each line that contains an instruction
+  as opposed to lines that merely contain assembler directives (assembler directives
+  are not executed by the virtual machine / runtime later and hence are not part
+  of the final code)
+- for .org assembler directives, adjust the address counter
+- write each address into the line so that the line knows the address
+- Create a symbol table that assigns addresses to symbols
+- remove assembler directives from the line list. Now the line list only contains
+  instructions (no more assembler directives)
+
+Phase 3
+- Iterate the list of lines
+- Using the symbol table which contains the values or addresses of labels,
+  evaluate all expression trees and store the final numeric value into the line
+
+Phase 4
+- Iterate the list of lines
+- Exceute the line. (At this point, the line should have enough information to be
+  executable without any issues. The line list should not contain assembler 
+  directives any more only executable instructions remain)
